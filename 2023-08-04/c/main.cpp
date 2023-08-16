@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <fstream>
 
@@ -13,7 +14,6 @@ void printMatrix(char **mat, int L, int C)
       std::cout << "\n";
     }
 }
-
 
 
 void printMatrixFile(char **mat, int L, int C)
@@ -56,8 +56,6 @@ void destroyMatrix(char** mat, int L)
 
 char** fractal( char** model, int& n, int k, int factor )
 {
-  std::cout << "+++" << "k=" << k << "+++" << std::endl;
-  printMatrix( model, n, n );
   if( k == 1 )
   {
     return model; 
@@ -76,7 +74,6 @@ char** fractal( char** model, int& n, int k, int factor )
         {
           for(int cc=factor*c; cc<factor*(c+1); cc++)
           {
-            std::cout << "l=" << l << "c=" << c << "ll=" << ll << "cc=" << cc << std::endl;
             model[ll][cc] = model[ll%2][cc%2];
           }
         }        
@@ -95,10 +92,6 @@ char** fractal( char** model, int& n, int k, int factor )
   }
 
   n = nn;
-  
-  std::cout << "---" << std::endl;
-  printMatrix( model, n, n );
-
   return fractal( model, n, k-1, factor );
 }
 
@@ -113,9 +106,8 @@ int main() {
 
     int factor = n;
 
-    std::cout << "n=" << n << "k=" << k << "n*k*factor=" << n*k*factor << std::endl;
-    
-    char** model = createMatrix(n*k*factor, n*k*factor);
+    //char** model = createMatrix(n*k*factor, n*k*factor);
+    char** model = createMatrix(pow(n,k), pow(n,k));
 
     for(int l=0; l<n; l++)
     {
@@ -130,9 +122,7 @@ int main() {
     
     model = fractal( model, n, k, factor );
 
-    std::cout << "---" << std::endl;
-    
-    printMatrix( model, n, n );
+    printMatrixFile( model, n, n );
     destroyMatrix( model, n );
 
     return 0;

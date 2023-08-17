@@ -18,18 +18,18 @@ void printMatrix(char **mat, int L, int C)
 
 void printMatrixFile(char **mat, int L, int C)
 {
-    std::fstream outputFile;
-    outputFile.open("output.txt", std::ios::out);
+    std::fstream file;
+    file.open("output.txt", std::ios::out);
 
     for(int l=0; l<L; l++)
     {
       for(int c=0; c<C; c++) 
       {
-       outputFile << mat[l][c];
+       file << mat[l][c];
       }
-      outputFile << "\n";
+      file << "\n";
     }
-    outputFile.close();
+    file.close();
 }
 
 
@@ -44,6 +44,18 @@ char** createMatrix(int L, int C)
 }
 
 
+void  fillMatrix(char **mat, int L, int C)
+{
+  for(int l=0; l<L; l++)
+  {
+    for(int c=0; c<C; c++) 
+    {
+      mat[l][c] = '-'; 
+    }
+  }
+}
+
+
 void destroyMatrix(char** mat, int L)
 {
   for(int l=0; l<L; l++)
@@ -54,27 +66,36 @@ void destroyMatrix(char** mat, int L)
 }
 
 
-char** fractal( char** model, int& n, int k, int factor )
+char** fractal( char** model, int n, int k, int factor )
 {
+
+  std::cout << "+++MODEL+++" << std::endl;
+  printMatrix( model, n, n );
+  std::cout << "+++++++++++" << std::endl;
+
   if( k == 1 )
   {
     return model; 
   }
 
   int nn = factor*n;
+  char  **modelmodel = createMatrix( nn, nn );
+  fillMatrix(modelmodel, nn, nn);
 
-  for(int l=(n-1); l>=0; l--)
+  for(int l=0; l<n; l++)
   {
-    for(int c=(n-1); c>=0; c--) 
+    for(int c=0; c<n; c++) 
     {
       char sign = model[l][c];
+      std::cout << sign << std::endl;
       if(sign=='.') // white space
       {
         for(int ll=factor*l; ll<factor*(l+1); ll++)  
         {
           for(int cc=factor*c; cc<factor*(c+1); cc++)
           {
-            model[ll][cc] = model[ll%2][cc%2];
+            modelmodel[ll][cc] = model[ll%factor][cc%factor];
+            //model[ll][cc] = '.';
           }
         }        
       }
@@ -84,46 +105,49 @@ char** fractal( char** model, int& n, int k, int factor )
         {
           for(int cc=factor*c; cc<factor*(c+1); cc++)
           {
-            model[ll][cc] = sign;
+            modelmodel[ll][cc] = sign;
+            //model[ll][cc] = '*';
           }
         }
       }
+    std::cout << "###" << std::endl;
+    printMatrix( modelmodel, nn, nn );
+    std::cout << "###" << std::endl;
     }
   }
-
+  
+  destroyMatrix( model, n );
   n = nn;
-  return fractal( model, n, k-1, factor );
+  model = modelmodel;
+
+  return fractal( model, n, k-1, factor);
 }
 
 
 int main() {
-    std::ifstream inputFile ("input.txt");
+    std::ifstream file ("input.txt");
 
     int n, k;
+    int& factor = n;
 
-    //std::cin >> n >> k;
-    inputFile >> n >> k;
+    file >> n >> k;
 
-    int factor = n;
-
-    //char** model = createMatrix(n*k*factor, n*k*factor);
-    char** model = createMatrix(pow(n,k), pow(n,k));
+    char** model = createMatrix(n, n);
 
     for(int l=0; l<n; l++)
     {
       for(int c=0; c<n; c++) 
       {
-        //std::cin >> model[l][c];
-        inputFile >> model[l][c];
+        file >> model[l][c];
       }
     }
 
-    inputFile.close();
+    file.close();
     
     model = fractal( model, n, k, factor );
 
-    printMatrixFile( model, n, n );
-    destroyMatrix( model, n );
+    //printMatrixFile( model, n, n );
+    //destroyMatrix( model, n );
 
     return 0;
 }

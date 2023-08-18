@@ -3,6 +3,17 @@
 #include <fstream>
 
 
+char** createMatrix(int L, int C)
+{
+  char** p = new char*[L];
+  for(int l=0; l<L; l++)
+  {
+    p[l] = new char[C];
+  }
+  return p;
+}
+
+
 void printMatrix(char **mat, int L, int C)
 {
     for(int l=0; l<L; l++)
@@ -33,17 +44,6 @@ void printMatrixFile(char **mat, int L, int C)
 }
 
 
-char** createMatrix(int L, int C)
-{
-  char** p = new char*[L];
-  for(int l=0; l<L; l++)
-  {
-    p[l] = new char[C];
-  }
-  return p;
-}
-
-
 void  fillMatrix(char **mat, int L, int C)
 {
   for(int l=0; l<L; l++)
@@ -66,12 +66,9 @@ void destroyMatrix(char** mat, int L)
 }
 
 
-char** fractal( char** model, int n, int k, int factor )
+char** fractal( char** base, char** model, int& n, int k, int factor )
 {
 
-  std::cout << "+++MODEL+++" << std::endl;
-  printMatrix( model, n, n );
-  std::cout << "+++++++++++" << std::endl;
 
   if( k == 1 )
   {
@@ -87,14 +84,13 @@ char** fractal( char** model, int n, int k, int factor )
     for(int c=0; c<n; c++) 
     {
       char sign = model[l][c];
-      std::cout << sign << std::endl;
       if(sign=='.') // white space
       {
         for(int ll=factor*l; ll<factor*(l+1); ll++)  
         {
           for(int cc=factor*c; cc<factor*(c+1); cc++)
           {
-            modelmodel[ll][cc] = model[ll%factor][cc%factor];
+            modelmodel[ll][cc] = base[ll%factor][cc%factor];
             //model[ll][cc] = '.';
           }
         }        
@@ -110,9 +106,6 @@ char** fractal( char** model, int n, int k, int factor )
           }
         }
       }
-    std::cout << "###" << std::endl;
-    printMatrix( modelmodel, nn, nn );
-    std::cout << "###" << std::endl;
     }
   }
   
@@ -120,7 +113,7 @@ char** fractal( char** model, int n, int k, int factor )
   n = nn;
   model = modelmodel;
 
-  return fractal( model, n, k-1, factor);
+  return fractal( base, model, n, k-1, factor);
 }
 
 
@@ -133,20 +126,22 @@ int main() {
     file >> n >> k;
 
     char** model = createMatrix(n, n);
+    char** base  = createMatrix(n, n);
 
     for(int l=0; l<n; l++)
     {
       for(int c=0; c<n; c++) 
       {
         file >> model[l][c];
+        base[l][c] = model[l][c];
       }
     }
 
     file.close();
     
-    model = fractal( model, n, k, factor );
+    model = fractal( base, model, n, k, factor );
 
-    //printMatrixFile( model, n, n );
+    printMatrixFile( model, n, n );
     //destroyMatrix( model, n );
 
     return 0;

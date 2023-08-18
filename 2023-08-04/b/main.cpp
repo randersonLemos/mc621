@@ -5,14 +5,30 @@ struct node {
   long long int p;
 };
 
-int f(node* nodes, long long int x, long long int y)
+long long int f(node* nodes, long long int x, long long int y)
 {
-  std::cout << x+1 << " " << y+1 << std::endl;
-  if( x+1 != 0 and y+1 != 0)
+  //std::cout << x+1 << " " << y+1 << std::endl;
+  if( x > 0 and y > 0)
   {
-    return nodes[x].a * nodes[y].a + f(nodes, nodes[x].p-1, nodes[y].p-1);
+    return nodes[x-1].a * nodes[y-1].a + f(nodes, nodes[x-1].p, nodes[y-1].p);
   }
   return 0;
+};
+
+long long int fIt(node* nodes, long long int x, long long int y)
+{
+  long long int ans=0;
+  while(true)
+  {
+    if( x > 0 and y > 0)
+    {
+      ans += nodes[x-1].a * nodes[y-1].a;
+      x = nodes[x-1].p;
+      y = nodes[y-1].p;
+      continue;
+    }
+    return ans;
+  }
 };
 
 
@@ -22,33 +38,23 @@ int main() {
  
   node* nodes = new node[n];
 
-  nodes[0].p = 0;
   for(int i=0; i<n; i++)
   {
     std::cin >> nodes[i].a;
   }
 
-  for(int i=0; i<n-1; i++)
+  nodes[0].p = 0;
+  for(int i=1; i<n; i++)
   {
-    std::cin >> nodes[i+1].p;
+    std::cin >> nodes[i].p;
   }
-
-
-  //for(int i=0; i<n; i++)
-  //{
-  //  std::cout << nodes[i].a << " " << nodes[i].p << std::endl;
-  //}
-  //std::cout << "---" << std::endl;
-  
 
   for(int i=0; i<q; i++)
   {
     int x, y;
     std::cin >> x >> y;
-    std::cout << f(nodes, x-1, y-1) << std::endl;
+    std::cout << fIt(nodes, x, y) << std::endl;
 
   }
-
-
   return 0;
 }

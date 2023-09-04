@@ -7,4 +7,4 @@ a, c, e, f, g, m
 a, f, g, (h)
 ## 2023-08-25
 ### Done
-a, b, c, e, f
+a, b, c, (d), e, f, (g)

@@ -16,10 +16,10 @@ while t:
 
     people = 2
     while True:
-        combinations = people*(people-1)/2
+        combinations = (people*(people-1))//2
         not_match_probability =  birthday_not_match_probability**combinations
         birthday_macth_probability = 1 - not_match_probability 
-        if birthday_macth_probability > 0.5:
+        if birthday_macth_probability >= 0.5:
             print(people-1)
             break
         people += 1

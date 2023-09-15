@@ -1,3 +1,5 @@
+#include <iostream>
+
 #define MODULO 100000007
 #define MAXM 20000
 #define MAXLEN 16
@@ -22,5 +24,29 @@ unsigned result_digito(unsigned digito, int m) {
     unsigned falta_para_9 = 9 - digito;
     return t9[m - falta_para_9];
 }
+
+
+int main()
+{
+  int t;
+  std::cin >> t;
+
+  preenche_tabela();
+  
+  while(t)
+  {
+    t = t - 1; 
+    unsigned m, n;
+    std::cin >> n >> m;
+
+    unsigned nn = result_digito(n, m);
+    
+    std::cout << nn << std::endl;
+
+  }
+ 
+
+}
+
 
 //main ler seq e aplicar funções para cada dígito

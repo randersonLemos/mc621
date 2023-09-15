@@ -1,9 +1,11 @@
+#include <iostream>
+
 /* recebe inteiro positivo n e imprime o n-ésimo living number*/
 void mostra_living(unsigned n) {
-    unsigned rep[16];
-    unsigned tamanho = 0;
+    unsigned long int rep[32];
+    unsigned long int tamanho = 0;
     while (n) {
-        unsigned digito = n % 9;
+        unsigned long int digito = n % 9;
         if (digito < 4) {
             rep[tamanho] = digito;
         } else {
@@ -14,8 +16,23 @@ void mostra_living(unsigned n) {
     }
 
     while (tamanho) {
-        cout << rep[tamanho - 1];
+        std::cout << rep[tamanho - 1];
         tamanho--;    
     }
-    cout << endl;
+    std::cout << std::endl;
+}
+
+
+int main(){
+  int t;
+  std::cin >> t;
+  while(t)
+  {
+    t = t - 1; 
+    unsigned k;
+    std::cin >> k;
+    mostra_living( k );
+  }
+
+  return 0;
 }

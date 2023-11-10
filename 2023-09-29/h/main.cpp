@@ -2,6 +2,7 @@
 #include <bitset>
 #include <vector>
 #include <map>
+
 using namespace std;
 
 typedef long long ll;
@@ -30,7 +31,6 @@ bool isPrime(ll N) {
     return true;
 }
 
-
 ll happyNumber(ll number)
 {
   ll happy = 0;
@@ -46,51 +46,50 @@ ll happyNumber(ll number)
 
 int main() {
 
-    sieve(10000); // can go up to 10^7 (needs a few seconds)
+    sieve(11000); // can go up to 10^7 (needs a few seconds)
  
-    //printf("%d\n", isPrime(136117223861LL)); // not a prime, 104729*1299709
-    //printf("%d\n", isPrime(2147483647)); // 10-digit prime
- 
+
     ll n;
-
-
-    std::map<ll, bool> myMap;
+    ll idx, number, candidate, happy;
 
     std::cin >> n;
     while(n)
     {
+
+      std::map<ll, bool> myMap;
+
+      //std::cout << "-------" << std::endl;
       n--; 
-      ll idx, number, candidate;
       std::cin >> idx >> number;
       if( isPrime(number) )
       {
-        //std::cout << number << std::endl;  
+        myMap[number] = true; 
         candidate = number;
-
-        myMap[candidate] = true; 
-
         while(true)
         {
-          candidate = happyNumber( candidate );
-          //std::cout << happyNumber( candidate ) << std::endl;
-          if(candidate == 1)
+          happy = happyNumber( candidate );
+          //std::cout << "number: " << candidate << " happy: " << happy << std::endl;
+         
+          if(happy == 1)
           {
-            std::cout << idx << " " << number << " " << "YES"  << std::endl;
+            std::cout << idx << " " << number << " YES" << std::endl;
             break;
           }
-          if( ! ( myMap.find( candidate ) == myMap.end() ) )
+          if( ! ( myMap.find( happy ) == myMap.end() ) )
           {
-            std::cout << idx << " " << number << " " << "NO"  << std::endl;
+            std::cout << idx << " " << number << " NO" << std::endl;
             break;
           }
 
-          myMap[candidate] = true; 
+          myMap[happy] = true; 
+
+          candidate = happy;
 
         }
       }
       else
       {
-        std::cout << idx << " " << number << " " << "NO"  << std::endl;
+        std::cout << idx << " " << number << " NO" << std::endl;
       }
     }
 

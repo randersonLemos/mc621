@@ -30,7 +30,7 @@ void computeLPSArray(char *P, int M, int *lps) {
 
 
 // Prints occurrences of P in T
-void KMPSearch(char *P, char *T, std::vector<int> &matches) {
+int KMPSearch(char *P, char *T) {
     int M = strlen(P);
     int N = strlen(T);
 
@@ -51,8 +51,8 @@ void KMPSearch(char *P, char *T, std::vector<int> &matches) {
 
         if (j == M) {
             //printf("Found pattern at index %d\n", i - j);
-            matches.push_back(i-j);
             j = lps[j - 1];
+            return 1;
         }
 
         // Mismatch after j matches
@@ -65,39 +65,49 @@ void KMPSearch(char *P, char *T, std::vector<int> &matches) {
                 i = i + 1;
         }
     }
+    return 0;
 }
 
 
 int main(){
-  int N;
-  std::cin >> N;
+  
+  bool inputFailed = false;
+  int count = 0;
+  std::vector<int> matches;
 
-  while(N){
-    N--; 
+  while(true){
+    count++;
     std::string T;
-    std::string P;
+    std::string P = "FBI";
 
-    std::cin >> T >> P;
+    if(!(std::cin >> T)) {
+      inputFailed = true;
+     }
 
-    std::vector<int> matches;
-    
-    //std::cout << T << " " << P << std::endl;
-
-    KMPSearch( const_cast<char*>(P.c_str()), const_cast<char*>(T.c_str()), matches ) ;
-
-    int size = matches.size();
-    if(size){
-      std::cout << size << std::endl;
-      int i;
-      for(i=0; i<size-1; i++) {
-        std::cout <<  matches[i]+1 << " ";
-      }
-      std::cout << matches[i]+1 << std::endl << std::endl;
+    if(inputFailed) {
+        break;
     }
-    else{
-      std::cout << "Not Found" << std::endl << std::endl;    
+    //std::cout << T << std::endl;
+    if(KMPSearch( const_cast<char*>(P.c_str()), const_cast<char*>(T.c_str()) )){
+      //std::cout << count << std::endl;
+      matches.push_back( count );
     }
-
   }
-}
 
+  int size = matches.size();
+  if(size){
+    //std::cout << size << std::endl;
+    int i;
+    for(i=0; i<size-1; i++) {
+      std::cout <<  matches[i] << " ";
+    }
+    std::cout << matches[i] << std::endl;
+  }
+  else{
+    std::cout << "HE GOT AWAY!" << std::endl;
+  }
+
+
+
+return 0;
+}

@@ -80,7 +80,6 @@ int main(){
     if(T[0] == '.')
       break;
 
-
     int len = 1;
 
     if(T.size() % 2 != 0){
